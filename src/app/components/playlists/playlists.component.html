@@ -1,8 +1,31 @@
-<ul class = 'list-group'>
-  <li 
-    *ngFor = 'let playlist of playlists'
-    class = 'list-group-item'
+<div class="container m-3">
+
+<div class="dropdown">
+  <button 
+    class="btn btn-secondary dropdown-toggle" 
+    type="button" 
+    id="dropdownMenuButton" 
+    data-toggle="dropdown"
+    style="width:100%"
   >
-    {{playlist.title}}
-  </li>
-</ul>
+    選擇播放列表
+  </button>
+  
+  <div class="dropdown-menu" style="width:100%">
+    <a 
+      *ngFor="let playlist of playlists"
+      class="dropdown-item text-center"
+      (click)="onSelect(playlist)"
+    >
+      {{playlist.title}}
+    </a>
+  </div>
+</div>
+
+<div class="card my-3">
+  <div class="card-body p-2 text-center">
+    {{selectedPlaylist.title}}
+  </div>
+</div>
+
+</div>

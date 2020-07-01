@@ -11,10 +11,19 @@ export class PlaylistsComponent implements OnInit {
 
   playlists: Playlist[];
 
+  selectedPlaylist: Playlist = {
+    title: '尚未選擇',
+    slug: ''
+  };
+
   constructor( private audibleService: AudibleService ) { }
 
   ngOnInit(): void {
     this.audibleService.getPlaylists().subscribe( playlists => this.playlists = playlists );
+  }
+
+  onSelect(playlist: Playlist): void {
+    this.selectedPlaylist = playlist;
   }
 
 }
