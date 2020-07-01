@@ -14,7 +14,7 @@ export class PlaylistsComponent implements OnInit {
   constructor( private audibleService: AudibleService ) { }
 
   ngOnInit(): void {
-    this.playlists = this.audibleService.getPlaylists();
+    this.audibleService.getPlaylists().subscribe( playlists => this.playlists = playlists );
   }
 
 }
