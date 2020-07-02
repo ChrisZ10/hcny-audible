@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { SelectPanelComponent } from './components/select-panel/select-panel.component';
 import { AlbumsComponent } from './components/albums/albums.component';
+import { TracksComponent } from './components/tracks/tracks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlaylistsComponent,
     SelectPanelComponent,
-    AlbumsComponent
+    AlbumsComponent,
+    TracksComponent
   ],
   imports: [
     BrowserModule,

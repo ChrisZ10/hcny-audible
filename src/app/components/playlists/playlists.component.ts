@@ -14,7 +14,7 @@ export class PlaylistsComponent implements OnInit {
     slug: ''
   };
 
-  @Input() playlists: Playlist;
+  @Input() playlists: Playlist[];
 
   @Output() playlistEvent = new EventEmitter<Playlist>();
 

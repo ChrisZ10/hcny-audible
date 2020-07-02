@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AudibleService } from '../../service/audible.service';
 import { Playlist } from '../../interface/playlist';
 import { Album } from '../../interface/album';
+import { Track } from '../../interface/track';
 
 @Component({
   selector: 'app-select-panel',
@@ -12,6 +13,7 @@ export class SelectPanelComponent implements OnInit {
 
   playlists: Playlist[] = [];
   albums: Album[] = [];
+  tracks: Track[] = [];
 
   constructor( private audibleService: AudibleService ) { }
 
@@ -24,7 +26,7 @@ export class SelectPanelComponent implements OnInit {
   }
 
   receiveAlbum($event): void {
-    console.log($event);
+    this.audibleService.getTracks($event.slug).subscribe( tracks => this.tracks = tracks );
   }
 
 }

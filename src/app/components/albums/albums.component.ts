@@ -13,7 +13,7 @@ export class AlbumsComponent implements OnInit {
     slug: ''
   };
 
-  @Input() albums: Album;
+  @Input() albums: Album[];
 
   @Output() albumEvent = new EventEmitter<Album>();
 

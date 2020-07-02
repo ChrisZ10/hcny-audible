@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Playlist } from '../interface/playlist';
 import { Album } from '../interface/album';
+import { Track } from '../interface/track';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
@@ -40,6 +41,17 @@ export class AudibleService {
     .pipe(
       tap(ev => console.log( 'fetched albums:' + ev )),
       catchError(this.handleError<Album[]>( 'getAlbums', [] ))
+    );
+  }
+
+  getTracks( album_slug: string ): Observable<Track[]> {
+    return this.http.get<Track[]>( 
+      `${this.baseUrl}/tracks`, 
+      {...this.httpOptions, params: new HttpParams().set('album_slug', `${album_slug}`) }
+    )
+    .pipe(
+      tap(ev => console.log( 'fetched tracks:' + ev )),
+      catchError(this.handleError<Track[]>( 'getTracks', [] ))
     );
   }
 
