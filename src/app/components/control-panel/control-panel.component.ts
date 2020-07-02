@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AudibleService } from '../../service/audible.service';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
 
 @Component({
@@ -7,12 +7,25 @@ import { Track } from 'src/app/interface/track';
   templateUrl: './control-panel.component.html',
   styleUrls: ['./control-panel.component.scss']
 })
-export class ControlPanelComponent implements OnInit {
+export class ControlPanelComponent implements OnInit, OnChanges {
 
-  @Input() track: Track;
+  @Input() currentTrack: Track;
 
-  constructor( private audibleService: AudibleService ) {}
+  previousTrack: Track = this.currentTrack;
+
+  constructor( 
+    private playbackService: PlaybackService 
+  ) {}
 
   ngOnInit(): void {}
+
+  ngOnChanges( changes: SimpleChanges ): void {
+    this.currentTrack = changes.currentTrack.currentValue;
+    this.previousTrack = changes.currentTrack.previousValue;
+    
+    if (this.currentTrack.uri !== '') {
+      this.playbackService.loadTrack(this.currentTrack);
+    }
+  }
 
 }
