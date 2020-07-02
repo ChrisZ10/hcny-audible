@@ -24,6 +24,9 @@ export class PlaylistsComponent implements OnInit {
 
   onSelect(playlist: Playlist): void {
     this.selectedPlaylist = playlist;
+    this.audibleService
+    .getAlbums( this.selectedPlaylist.slug )
+    .subscribe( albums => console.log(albums) );
   }
 
 }
