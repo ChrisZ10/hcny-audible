@@ -1,0 +1,12 @@
+<div class="container p-3">
+  <app-playlists 
+    [playlists] = "playlists"
+    (playlistEvent) = "receivePlaylist($event)"
+  >
+  </app-playlists>
+  <app-albums
+    [albums] = "albums"
+    (albumEvent) = "receiveAlbum($event)"
+  >    
+  </app-albums>
+</div>

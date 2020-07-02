@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AudibleService } from '../../service/audible.service';
 import { Playlist } from 'src/app/interface/playlist';
 
@@ -9,24 +9,22 @@ import { Playlist } from 'src/app/interface/playlist';
 })
 export class PlaylistsComponent implements OnInit {
 
-  playlists: Playlist[];
-
   selectedPlaylist: Playlist = {
     title: '尚未選擇',
     slug: ''
   };
 
+  @Input() playlists: Playlist;
+
+  @Output() playlistEvent = new EventEmitter<Playlist>();
+
   constructor( private audibleService: AudibleService ) { }
 
-  ngOnInit(): void {
-    this.audibleService.getPlaylists().subscribe( playlists => this.playlists = playlists );
-  }
+  ngOnInit(): void {}
 
   onSelect(playlist: Playlist): void {
     this.selectedPlaylist = playlist;
-    this.audibleService
-    .getAlbums( this.selectedPlaylist.slug )
-    .subscribe( albums => console.log(albums) );
+    this.playlistEvent.emit(this.selectedPlaylist);
   }
 
 }

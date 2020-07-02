@@ -5,11 +5,15 @@ import { HttpClientModule }    from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
+import { SelectPanelComponent } from './components/select-panel/select-panel.component';
+import { AlbumsComponent } from './components/albums/albums.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PlaylistsComponent
+    PlaylistsComponent,
+    SelectPanelComponent,
+    AlbumsComponent
   ],
   imports: [
     BrowserModule,

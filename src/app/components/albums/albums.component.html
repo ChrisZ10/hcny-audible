@@ -1,27 +1,29 @@
 <div class="dropdown">
-  <button 
+  <button
+    [ngClass]="{'disabled': albums.length === 0}" 
     class="btn btn-secondary dropdown-toggle" 
     type="button" 
     id="dropdownMenuButton" 
     data-toggle="dropdown"
     style="width:100%"
   >
-    選擇播放列表
+    選擇專輯
   </button>
-  
+    
   <div class="dropdown-menu" style="width:100%">
     <a 
-      *ngFor="let playlist of playlists"
+      *ngFor="let album of albums"
       class="dropdown-item text-center"
-      (click)="onSelect(playlist)"
+      (click)="onSelect(album)"
     >
-      {{playlist.title}}
+      {{album.title}}
     </a>
   </div>
 </div>
-
+  
 <div class="card my-3">
   <div class="card-body p-2 text-center">
-    {{selectedPlaylist.title}}
+    {{selectedAlbum.title}}
   </div>
 </div>
+  
