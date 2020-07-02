@@ -11,6 +11,12 @@
   </app-albums>
   <app-tracks
     [tracks] = "tracks"
+    (trackEvent) = "receiveTrack($event)"
   >    
   </app-tracks>
+
+  <app-control-panel
+    [track] = "track"
+  >
+  </app-control-panel>
 </div>

@@ -14,6 +14,11 @@ export class SelectPanelComponent implements OnInit {
   playlists: Playlist[] = [];
   albums: Album[] = [];
   tracks: Track[] = [];
+  track: Track = {
+    title: '尚未加載',
+    slug: '',
+    uri: ''
+  };
 
   constructor( private audibleService: AudibleService ) { }
 
@@ -27,6 +32,10 @@ export class SelectPanelComponent implements OnInit {
 
   receiveAlbum($event): void {
     this.audibleService.getTracks($event.slug).subscribe( tracks => this.tracks = tracks );
+  }
+
+  receiveTrack($event): void {
+    this.audibleService.getTrack($event.slug).subscribe( track => this.track = track );
   }
 
 }

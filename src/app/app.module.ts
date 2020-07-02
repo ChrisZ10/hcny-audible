@@ -8,6 +8,7 @@ import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { SelectPanelComponent } from './components/select-panel/select-panel.component';
 import { AlbumsComponent } from './components/albums/albums.component';
 import { TracksComponent } from './components/tracks/tracks.component';
+import { ControlPanelComponent } from './components/control-panel/control-panel.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { TracksComponent } from './components/tracks/tracks.component';
     PlaylistsComponent,
     SelectPanelComponent,
     AlbumsComponent,
-    TracksComponent
+    TracksComponent,
+    ControlPanelComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { AudibleService } from '../../service/audible.service';
 import { Track } from '../../interface/track';
 
 @Component({
@@ -18,7 +19,7 @@ export class TracksComponent implements OnInit {
 
   @Output() trackEvent = new EventEmitter<Track>();
 
-  constructor() { }
+  constructor( private audibleService: AudibleService ) { }
 
   ngOnInit(): void {}
 

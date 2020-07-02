@@ -55,6 +55,17 @@ export class AudibleService {
     );
   }
 
+  getTrack( slug: string ): Observable<Track> {
+    return this.http.get<Track>( 
+      `${this.baseUrl}/tracks`, 
+      {...this.httpOptions, params: new HttpParams().set('slug', `${slug}`) }
+    )
+    .pipe(
+      tap(ev => console.log( 'fetched single track:' + ev )),
+      catchError(this.handleError<Track>( 'getTrack', {title: '', slug: '', uri: ''} ))
+    );
+  }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
