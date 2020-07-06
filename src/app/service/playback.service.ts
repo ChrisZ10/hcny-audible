@@ -20,7 +20,7 @@ export class PlaybackService {
 
     console.log(this.sound);
 
-    this.sound.play();
+    // this.sound.play();
   }
 
 }
