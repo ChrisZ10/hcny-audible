@@ -12,6 +12,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   @Input() currentTrack: Track;
 
   previousTrack: Track = this.currentTrack;
+  
+  isPlaying: boolean = false;
 
   constructor( 
     private playbackService: PlaybackService 
@@ -26,6 +28,16 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     if (this.currentTrack.uri !== '') {
       this.playbackService.loadTrack(this.currentTrack);
     }
+  }
+
+  play(): void {
+    this.playbackService.playTrack();
+    this.isPlaying = true;
+  }
+
+  pause(): void {
+    this.playbackService.pauseTrack();
+    this.isPlaying = false;
   }
 
 }

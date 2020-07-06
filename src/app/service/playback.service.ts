@@ -15,12 +15,26 @@ export class PlaybackService {
 
   loadTrack( track: Track ): void {
     this.sound = new Howl({
-      src: [`${this.baseUrl}${track.uri}`]
+      src: [`${this.baseUrl}${track.uri}`],
+      onload: () => {
+        console.log("sound successfully loaded");
+      }
     });
 
+    console.log("track loaded:");
     console.log(this.sound);
+  }
 
-    // this.sound.play();
+  playTrack(): void {
+    if (this.sound) {
+      this.sound.play();
+    }
+  }
+
+  pauseTrack(): void {
+    if (this.sound) {
+      this.sound.pause();
+    }
   }
 
 }

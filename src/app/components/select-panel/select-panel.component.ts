@@ -19,6 +19,7 @@ export class SelectPanelComponent implements OnInit {
     slug: '',
     uri: ''
   };
+  isSelected: boolean = false;
 
   constructor( private audibleService: AudibleService ) { }
 
@@ -35,7 +36,10 @@ export class SelectPanelComponent implements OnInit {
   }
 
   receiveTrack($event): void {
-    this.audibleService.getTrack($event.slug).subscribe( track => this.track = track );
+    this.audibleService.getTrack($event.slug).subscribe( track => {
+      this.track = track;
+      this.isSelected = true; 
+    });
   }
 
 }
