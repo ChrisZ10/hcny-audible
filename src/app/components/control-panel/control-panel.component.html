@@ -3,41 +3,45 @@
 
   <app-progress-bar></app-progress-bar>
 
-  <div class="btn-group" role="group">    
-    <button type="button" class="btn btn-secondary">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    
-    <button
-      type="button" 
-      class="btn btn-secondary"
-      *ngIf="!(this.playbackService.isLoaded | async) else controlBlock"
-    >
-      Loading
-    </button>
-    <ng-template #controlBlock>
-      <button 
+  <div class="container p-3">
+
+    <div class="btn-group" role="group">    
+      <button type="button" class="btn btn-secondary">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      
+      <button
         type="button" 
         class="btn btn-secondary"
-        *ngIf="!isPlaying else elseBlock"
-        (click)="play()"
+        *ngIf="!(this.playbackService.isLoaded | async) else controlBlock"
       >
-          <i class="fas fa-play"></i>
+        Loading
       </button>
-      <ng-template #elseBlock>
+      <ng-template #controlBlock>
         <button 
           type="button" 
           class="btn btn-secondary"
-          (click)="pause()"        
+          *ngIf="!isPlaying else elseBlock"
+          (click)="play()"
         >
-            <i class="fas fa-pause"></i>
+            <i class="fas fa-play"></i>
         </button>
+        <ng-template #elseBlock>
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="pause()"        
+          >
+              <i class="fas fa-pause"></i>
+          </button>
+        </ng-template>
       </ng-template>
-    </ng-template>
-    
-    <button type="button" class="btn btn-secondary">
-      <i class="fas fa-chevron-right"></i>
-    </button>
+      
+      <button type="button" class="btn btn-secondary">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+    </div>
   
   </div>
 </div>

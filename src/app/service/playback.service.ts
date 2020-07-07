@@ -13,6 +13,9 @@ export class PlaybackService {
   sound: Howl;
 
   isLoaded: Subject<boolean> = new Subject<boolean>();
+  
+  pos: Subject<string> = new Subject<string>();
+  duration: Subject<string> = new Subject<string>();
   percent: Subject<number> = new Subject<number>();
 
   constructor() { }
@@ -22,8 +25,12 @@ export class PlaybackService {
 
     this.sound = new Howl({
       src: [`${this.baseUrl}${track.uri}`],
+      preload: true,
+      html5: true,
       onload: () => {
-        this.isLoaded.next(true);
+        this.isLoaded.next(true);        
+        this.duration.next(this.toString(this.sound.duration()));
+        this.pos.next("00:00:00");
         console.log("sound successfully loaded");
       },
       onloaderror: () => {
@@ -52,9 +59,23 @@ export class PlaybackService {
 
   updatePosition(): void {
     setInterval(() => {
-      // console.log(this.sound.seek() + ":" + this.sound.duration());
+      this.pos.next(this.toString(this.sound.seek()));
       this.percent.next(this.sound.seek() / this.sound.duration());
     }, 1000);
+  }
+
+  private toString(seconds: number): string {
+    const dateObj = new Date( seconds * 1000 );
+    
+    const hr = Number.isNaN(dateObj.getUTCHours())? 0 : dateObj.getUTCHours();
+    const min = Number.isNaN(dateObj.getUTCMinutes())? 0 : dateObj.getUTCMinutes();
+    const sec = Number.isNaN(dateObj.getSeconds())? 0 : dateObj.getSeconds();
+
+    const timeString = hr.toString().padStart( 2, '0' ) + ':' + 
+                       min.toString().padStart(2, '0') + ':' + 
+                       sec.toString().padStart(2, '0');
+
+    return timeString;
   }
 
 }
