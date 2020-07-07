@@ -9,13 +9,8 @@ import { Track } from '../../interface/track';
 })
 export class TracksComponent implements OnInit {
 
-  selectedTrack: Track = {
-    title: '尚未選擇',
-    slug: '',
-    uri: ''
-  };
-
   @Input() tracks: Track[];
+  @Input() selectedTrack: Track;
 
   @Output() trackEvent = new EventEmitter<Track>();
 
@@ -24,8 +19,10 @@ export class TracksComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelect(track: Track): void {
-    this.selectedTrack = track;
-    this.trackEvent.emit(this.selectedTrack);
+    if (this.selectedTrack !== track) {
+      this.selectedTrack = track;
+      this.trackEvent.emit(this.selectedTrack);
+    }
   }
 
 }

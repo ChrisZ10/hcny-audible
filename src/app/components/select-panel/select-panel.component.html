@@ -6,11 +6,13 @@
   </app-playlists>
   <app-albums
     [albums] = "albums"
+    [selectedAlbum] = "selectedAlbum"
     (albumEvent) = "receiveAlbum($event)"
   >    
   </app-albums>
   <app-tracks
     [tracks] = "tracks"
+    [selectedTrack] = "selectedTrack"
     (trackEvent) = "receiveTrack($event)"
   >    
   </app-tracks>

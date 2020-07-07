@@ -7,13 +7,9 @@ import { Album } from '../../interface/album';
   styleUrls: ['./albums.component.scss']
 })
 export class AlbumsComponent implements OnInit {
-
-  selectedAlbum: Album = {
-    title: '尚未選擇',
-    slug: ''
-  };
-
+  
   @Input() albums: Album[];
+  @Input() selectedAlbum: Album;
 
   @Output() albumEvent = new EventEmitter<Album>();
 
@@ -22,8 +18,10 @@ export class AlbumsComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelect(album: Album): void {
-    this.selectedAlbum = album;
-    this.albumEvent.emit(this.selectedAlbum);
+    if (this.selectedAlbum !== album) {
+      this.selectedAlbum = album;
+      this.albumEvent.emit(this.selectedAlbum);
+    }
   }
 
 }

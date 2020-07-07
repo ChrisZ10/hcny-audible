@@ -22,9 +22,10 @@ export class PlaybackService {
       src: [`${this.baseUrl}${track.uri}`],
       onload: () => {
         this.isLoaded.next(true);
+        console.log("sound successfully loaded");
       },
       onloaderror: () => {
-        this.isLoaded.error(false);
+        this.isLoaded.next(false);
       }
     });
 

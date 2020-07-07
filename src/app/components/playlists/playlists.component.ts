@@ -23,8 +23,10 @@ export class PlaylistsComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelect(playlist: Playlist): void {
-    this.selectedPlaylist = playlist;
-    this.playlistEvent.emit(this.selectedPlaylist);
+    if (this.selectedPlaylist !== playlist) {
+      this.selectedPlaylist = playlist;
+      this.playlistEvent.emit(this.selectedPlaylist);
+    }
   }
 
 }

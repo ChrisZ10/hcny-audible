@@ -12,8 +12,20 @@ import { Track } from '../../interface/track';
 export class SelectPanelComponent implements OnInit {
 
   playlists: Playlist[] = [];
+  
   albums: Album[] = [];
+  selectedAlbum: Album = {
+    title: '尚未選擇',
+    slug: ''
+  };
+  
   tracks: Track[] = [];
+  selectedTrack: Track = {
+    title: '尚未選擇',
+    slug: '',
+    uri: ''
+  };
+
   track: Track = {
     title: '尚未加載',
     slug: '',
@@ -28,11 +40,30 @@ export class SelectPanelComponent implements OnInit {
   }
 
   receivePlaylist($event): void {
-    this.audibleService.getAlbums($event.slug).subscribe( albums => this.albums = albums );
+    this.audibleService.getAlbums($event.slug).subscribe( albums => {
+      this.albums = albums;
+      this.selectedAlbum = {
+        title: '尚未選擇',
+        slug: ''
+      };
+      this.tracks = [];
+      this.selectedTrack = {
+        title: '尚未選擇',
+        slug: '',
+        uri: ''
+      };
+    });
   }
 
   receiveAlbum($event): void {
-    this.audibleService.getTracks($event.slug).subscribe( tracks => this.tracks = tracks );
+    this.audibleService.getTracks($event.slug).subscribe( tracks => {
+      this.tracks = tracks;
+      this.selectedTrack = {
+        title: '尚未選擇',
+        slug: '',
+        uri: ''
+      };
+    });
   }
 
   receiveTrack($event): void {
