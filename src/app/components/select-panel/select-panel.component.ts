@@ -46,12 +46,20 @@ export class SelectPanelComponent implements OnInit {
         title: '尚未選擇',
         slug: ''
       };
+      
       this.tracks = [];
       this.selectedTrack = {
         title: '尚未選擇',
         slug: '',
         uri: ''
       };
+
+      this.track = {
+        title: '尚未加載',
+        slug: '',
+        uri: ''
+      };
+      this.isSelected = false;
     });
   }
 
@@ -63,6 +71,13 @@ export class SelectPanelComponent implements OnInit {
         slug: '',
         uri: ''
       };
+
+      this.track = {
+        title: '尚未加載',
+        slug: '',
+        uri: ''
+      };
+      this.isSelected = false;
     });
   }
 
