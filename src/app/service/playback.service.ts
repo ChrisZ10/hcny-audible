@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Howl, Howler } from 'howler';
 import { Track } from 'src/app/interface/track';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,19 @@ export class PlaybackService {
 
   sound: Howl;
 
+  isLoaded: Subject<boolean> = new Subject<boolean>();
+
   constructor() { }
 
   loadTrack( track: Track ): void {
     this.sound = new Howl({
       src: [`${this.baseUrl}${track.uri}`],
-      onload: () => {}
+      onload: () => {
+        this.isLoaded.next(true);
+      },
+      onloaderror: () => {
+        this.isLoaded.error(false);
+      }
     });
 
     console.log("track loaded:");
@@ -34,5 +42,7 @@ export class PlaybackService {
       this.sound.pause();
     }
   }
+
+
 
 }

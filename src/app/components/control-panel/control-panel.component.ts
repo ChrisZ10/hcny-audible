@@ -14,16 +14,24 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   previousTrack: Track = this.currentTrack;
   
   isPlaying: boolean = false;
+  isLoaded: boolean = false;
 
-  constructor( 
-    private playbackService: PlaybackService 
-  ) {}
+  constructor( private playbackService: PlaybackService ) {
+    this.playbackService.isLoaded.subscribe({ 
+      next(val) { 
+        this.isLoaded = val;
+        console.log("sound successfully loaded"); 
+      },
+      error(err) { this.isLoaded = err }
+    });
+  }
 
   ngOnInit(): void {}
 
   ngOnChanges( changes: SimpleChanges ): void {
     this.currentTrack = changes.currentTrack.currentValue;
     this.previousTrack = changes.currentTrack.previousValue;
+    this.isLoaded = false;
     
     if (this.currentTrack.uri !== '') {
       this.playbackService.loadTrack(this.currentTrack);
@@ -39,5 +47,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     this.playbackService.pauseTrack();
     this.isPlaying = false;
   }
+
+
 
 }
