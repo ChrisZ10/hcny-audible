@@ -17,6 +17,7 @@ export class PlaybackService {
   constructor() { }
 
   loadTrack( track: Track ): void {
+    this.isLoaded.next(false);
     this.sound = new Howl({
       src: [`${this.baseUrl}${track.uri}`],
       onload: () => {
