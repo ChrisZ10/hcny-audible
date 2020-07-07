@@ -10,6 +10,7 @@ import { SelectPanelComponent } from './components/select-panel/select-panel.com
 import { AlbumsComponent } from './components/albums/albums.component';
 import { TracksComponent } from './components/tracks/tracks.component';
 import { ControlPanelComponent } from './components/control-panel/control-panel.component';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ControlPanelComponent } from './components/control-panel/control-panel.
     SelectPanelComponent,
     AlbumsComponent,
     TracksComponent,
-    ControlPanelComponent
+    ControlPanelComponent,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,
