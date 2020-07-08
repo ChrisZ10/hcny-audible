@@ -20,6 +20,7 @@ export class ProgressBarComponent implements OnInit {
     this.posEvent.emit($event.target.value);
     this.playbackService.stopUpdatePosition = false;
     this.playbackService.playTrack();
+    this.playbackService.message.next("change icon");
   }
 
   onInput(): void {

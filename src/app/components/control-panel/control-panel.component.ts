@@ -26,6 +26,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     this.playbackService.message.subscribe(msg => {
       if (msg === "load next track") {
         this.forward();
+      } else if (msg === "change icon") {
+        this.isPlaying = true;
       }
     });
   }
@@ -36,6 +38,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     
     if (this.currentTrack.uri !== '') {
       this.playbackService.loadTrack(this.currentTrack);
+      this.isPlaying = true;
     }
   }
 
