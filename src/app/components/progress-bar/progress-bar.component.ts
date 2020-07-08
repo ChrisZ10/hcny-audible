@@ -18,6 +18,13 @@ export class ProgressBarComponent implements OnInit {
 
   onChange($event): void {
     this.posEvent.emit($event.target.value);
+    this.playbackService.stopUpdatePosition = false;
+    this.playbackService.playTrack();
+  }
+
+  onInput(): void {
+    this.playbackService.stopUpdatePosition = true;
+    this.playbackService.pauseTrack();
   }
 
 }

@@ -13,10 +13,14 @@ export class PlaybackService {
   sound: Howl;
 
   isLoaded: Subject<boolean> = new Subject<boolean>();
+
+  stopUpdatePosition: boolean = false;
   
   pos: Subject<string> = new Subject<string>();
   duration: Subject<string> = new Subject<string>();
   percent: Subject<number> = new Subject<number>();
+
+  message: Subject<string> = new Subject<string>();
 
   constructor() { }
 
@@ -39,6 +43,9 @@ export class PlaybackService {
       },
       onplay: () => {
         this.updatePosition();
+      },
+      onend: () => {
+        this.message.next("load next track");
       }
     });
 
@@ -61,13 +68,14 @@ export class PlaybackService {
 
   updatePosition(): void {
     setInterval(() => {
-      this.pos.next(this.toString(this.sound.seek()));
-      this.percent.next(this.sound.seek() / this.sound.duration());
+      if (!this.stopUpdatePosition) {
+        this.pos.next(this.toString(this.sound.seek()));
+        this.percent.next(this.sound.seek() / this.sound.duration());
+      }
     }, 1000);
   }
 
   seekPosition(percent: number): void {
-    // console.log(this.sound.duration() * percent / 100);
     this.sound.seek(this.sound.duration() * percent / 100);
   }
 

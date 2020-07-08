@@ -22,7 +22,13 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     public playbackService: PlaybackService 
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.playbackService.message.subscribe(msg => {
+      if (msg === "load next track") {
+        this.forward();
+      }
+    });
+  }
 
   ngOnChanges( changes: SimpleChanges ): void {
     this.currentTrack = changes.currentTrack.currentValue;
