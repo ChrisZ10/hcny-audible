@@ -55,6 +55,7 @@ export class PlaybackService {
   pauseTrack(): void {
     if (this.sound) {
       this.sound.pause();
+      console.log("sound paused");
     }
   }
 

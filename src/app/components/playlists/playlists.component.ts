@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AudibleService } from '../../service/audible.service';
+import { PlaybackService } from '../../service/playback.service';
 import { Playlist } from 'src/app/interface/playlist';
 
 @Component({
@@ -18,7 +19,10 @@ export class PlaylistsComponent implements OnInit {
 
   @Output() playlistEvent = new EventEmitter<Playlist>();
 
-  constructor( private audibleService: AudibleService ) { }
+  constructor( 
+    private audibleService: AudibleService,
+    private playbackService: PlaybackService 
+  ) { }
 
   ngOnInit(): void {}
 
@@ -26,6 +30,7 @@ export class PlaylistsComponent implements OnInit {
     if (this.selectedPlaylist !== playlist) {
       this.selectedPlaylist = playlist;
       this.playlistEvent.emit(this.selectedPlaylist);
+      this.playbackService.pauseTrack();
     }
   }
 

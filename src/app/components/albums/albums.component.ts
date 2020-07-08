@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Album } from '../../interface/album';
+import { PlaybackService } from '../../service/playback.service';
 
 @Component({
   selector: 'app-albums',
@@ -13,7 +14,7 @@ export class AlbumsComponent implements OnInit {
 
   @Output() albumEvent = new EventEmitter<Album>();
 
-  constructor() { }
+  constructor( private playbackService: PlaybackService ) { }
 
   ngOnInit(): void {}
 
@@ -21,6 +22,7 @@ export class AlbumsComponent implements OnInit {
     if (this.selectedAlbum !== album) {
       this.selectedAlbum = album;
       this.albumEvent.emit(this.selectedAlbum);
+      this.playbackService.pauseTrack();
     }
   }
 
