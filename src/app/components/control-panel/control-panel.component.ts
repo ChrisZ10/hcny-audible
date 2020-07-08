@@ -44,12 +44,20 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   backward(): void {
     if (this.index > 0) {
       this.index--;
+      this.currentTrack = this.tracks[this.index];
+      if (this.currentTrack.uri !== '') {
+        this.playbackService.loadTrack(this.currentTrack);
+      }
     }
   }
 
   forward(): void {
     if (this.index < this.tracks.length - 1) {
       this.index++;
+      this.currentTrack = this.tracks[this.index];
+      if (this.currentTrack.uri !== '') {
+        this.playbackService.loadTrack(this.currentTrack);
+      }
     }
   }
 
