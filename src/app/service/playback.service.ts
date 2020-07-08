@@ -27,6 +27,7 @@ export class PlaybackService {
       src: [`${this.baseUrl}${track.uri}`],
       preload: true,
       html5: true,
+      autoplay: true,
       onload: () => {
         this.isLoaded.next(true);        
         this.duration.next(this.toString(this.sound.duration()));

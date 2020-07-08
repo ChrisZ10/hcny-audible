@@ -14,7 +14,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   @Output() updateEvent = new EventEmitter<Track>();
   
-  isPlaying: boolean = false;
+  isPlaying: boolean = true;
 
   index: number = 0;
 
@@ -45,22 +45,26 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   backward(): void {
     if (this.index > 0) {
+      this.playbackService.pauseTrack();
       this.index--;
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
         this.playbackService.loadTrack(this.currentTrack);
         this.updateEvent.emit(this.currentTrack);
+        this.isPlaying = true;
       }
     }
   }
 
   forward(): void {
     if (this.index < this.tracks.length - 1) {
+      this.playbackService.pauseTrack();
       this.index++;
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
         this.playbackService.loadTrack(this.currentTrack);
         this.updateEvent.emit(this.currentTrack);
+        this.isPlaying = true;
       }
     }
   }
