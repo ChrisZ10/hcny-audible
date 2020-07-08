@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
 
@@ -11,6 +11,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   @Input() currentTrack: Track;
   @Input() tracks: Track[];
+
+  @Output() updateEvent = new EventEmitter<Track>();
   
   isPlaying: boolean = false;
 
@@ -47,6 +49,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
         this.playbackService.loadTrack(this.currentTrack);
+        this.updateEvent.emit(this.currentTrack);
       }
     }
   }
@@ -57,6 +60,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
         this.playbackService.loadTrack(this.currentTrack);
+        this.updateEvent.emit(this.currentTrack);
       }
     }
   }

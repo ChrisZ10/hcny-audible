@@ -21,6 +21,7 @@
     [currentTrack] = "track"
     [tracks] = "tracks"
     *ngIf="isSelected"
+    (updateEvent) = "receiveUpdateTrack($event)"
   >
   </app-control-panel>
 </div>

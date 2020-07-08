@@ -88,4 +88,10 @@ export class SelectPanelComponent implements OnInit {
     });
   }
 
+  receiveUpdateTrack($event): void {
+    this.audibleService.getTrack($event.slug).subscribe( track => {
+      this.selectedTrack = track;
+    });
+  }
+
 }
