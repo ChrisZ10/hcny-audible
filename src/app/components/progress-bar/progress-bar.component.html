@@ -1,11 +1,14 @@
-<div class="progress">
-  <div 
-    class="progress-bar" 
-    [ngStyle]="{ 'width': (this.playbackService.percent | async) * 100 + '%' }" 
-    role="progressbar"
-  >
+<form>
+  <div class="form-group">
+    <input 
+      type="range" 
+      class="form-control-range" 
+      id="formControlRange" 
+      (change)="onChange($event)"
+      [value]="(this.playbackService.percent | async) * 100"
+    >
   </div>
-</div>
+</form>
 
 <div class="container px-1 pt-1 pb-3">
   <span class="float-left">{{ this.playbackService.pos | async }}</span>

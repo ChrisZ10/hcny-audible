@@ -69,4 +69,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     }
   }
 
+  receivePos($event): void {
+    this.playbackService.seekPosition($event);
+  }
+
 }

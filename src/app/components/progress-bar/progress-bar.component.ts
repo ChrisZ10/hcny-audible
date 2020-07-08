@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 
 @Component({
@@ -8,10 +8,16 @@ import { PlaybackService } from '../../service/playback.service';
 })
 export class ProgressBarComponent implements OnInit {
 
+  @Output() posEvent = new EventEmitter<number>();
+
   constructor( 
     public playbackService: PlaybackService 
   ) {}
 
   ngOnInit(): void {}
+
+  onChange($event): void {
+    this.posEvent.emit($event.target.value);
+  }
 
 }

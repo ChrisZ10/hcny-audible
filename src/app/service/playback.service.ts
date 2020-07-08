@@ -65,6 +65,11 @@ export class PlaybackService {
     }, 1000);
   }
 
+  seekPosition(percent: number): void {
+    // console.log(this.sound.duration() * percent / 100);
+    this.sound.seek(this.sound.duration() * percent / 100);
+  }
+
   private toString(seconds: number): string {
     const dateObj = new Date( seconds * 1000 );
     
