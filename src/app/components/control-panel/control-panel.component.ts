@@ -10,10 +10,11 @@ import { Track } from 'src/app/interface/track';
 export class ControlPanelComponent implements OnInit, OnChanges {
 
   @Input() currentTrack: Track;
-
-  previousTrack: Track = this.currentTrack;
+  @Input() tracks: Track[];
   
   isPlaying: boolean = false;
+
+  index: number = 0;
 
   constructor( 
     public playbackService: PlaybackService 
@@ -23,7 +24,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges( changes: SimpleChanges ): void {
     this.currentTrack = changes.currentTrack.currentValue;
-    this.previousTrack = changes.currentTrack.previousValue;
+    this.index = this.tracks.findIndex(track => track.slug === this.currentTrack.slug);
     
     if (this.currentTrack.uri !== '') {
       this.playbackService.loadTrack(this.currentTrack);
@@ -38,6 +39,18 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   pause(): void {
     this.playbackService.pauseTrack();
     this.isPlaying = false;
+  }
+
+  backward(): void {
+    if (this.index > 0) {
+      this.index--;
+    }
+  }
+
+  forward(): void {
+    if (this.index < this.tracks.length - 1) {
+      this.index++;
+    }
   }
 
 }
