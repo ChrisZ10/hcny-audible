@@ -3,11 +3,11 @@
     <input 
       type="range" 
       class="form-control-range"
-      [ngClass]="{'disabled': (this.playbackService.percent | async)}" 
       id="formControlRange" 
       (change)="onChange($event)"
       (input)="onInput()"
       [value]="(this.playbackService.percent | async) * 100"
+      [disabled]="!(this.playbackService.isLoaded | async)"
     >
   </div>
 </form>

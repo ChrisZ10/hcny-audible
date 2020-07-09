@@ -32,7 +32,7 @@ export class PlaybackService {
     self.sound = new Howl({
       src: [`${self.baseUrl}${track.uri}`],
       preload: true,
-      html5: true,
+      //html5: true,
       autoplay: true,
       onload: () => {
         self.isLoaded.next(true);        
