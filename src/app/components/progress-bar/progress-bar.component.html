@@ -2,7 +2,8 @@
   <div class="form-group">
     <input 
       type="range" 
-      class="form-control-range" 
+      class="form-control-range"
+      [ngClass]="{'disabled': (this.playbackService.percent | async)}" 
       id="formControlRange" 
       (change)="onChange($event)"
       (input)="onInput()"
