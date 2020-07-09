@@ -25,27 +25,29 @@ export class PlaybackService {
   constructor() { }
 
   loadTrack( track: Track ): void {
-    this.isLoaded.next(false);
+    let self = this;
 
-    this.sound = new Howl({
-      src: [`${this.baseUrl}${track.uri}`],
+    self.isLoaded.next(false);
+
+    self.sound = new Howl({
+      src: [`${self.baseUrl}${track.uri}`],
       preload: true,
       html5: true,
       autoplay: true,
       onload: () => {
-        this.isLoaded.next(true);        
-        this.duration.next(this.toString(this.sound.duration()));
-        this.pos.next("00:00:00");
+        self.isLoaded.next(true);        
+        self.duration.next(self.toString(self.sound.duration()));
+        self.pos.next("00:00:00");
         console.log("sound successfully loaded");
       },
       onloaderror: () => {
-        this.isLoaded.next(false);
+        self.isLoaded.next(false);
       },
       onplay: () => {
-        this.updatePosition();
+        window.requestAnimationFrame(self.updatePosition.bind(self));
       },
       onend: () => {
-        this.message.next("load next track");
+        self.message.next("load next track");
       }
     });
 
@@ -67,16 +69,20 @@ export class PlaybackService {
   }
 
   updatePosition(): void {
-    setInterval(() => {
-      if (!this.stopUpdatePosition) {
-        this.pos.next(this.toString(this.sound.seek()));
-        this.percent.next(this.sound.seek() / this.sound.duration());
-      }
-    }, 1000);
+    let self = this;
+    
+    self.pos.next(self.toString(self.sound.seek()));
+    self.percent.next(self.sound.seek() / self.sound.duration());
+    
+    if (self.sound.playing()) {
+      window.requestAnimationFrame(self.updatePosition.bind(self));
+    }
   }
 
   seekPosition(percent: number): void {
     this.sound.seek(this.sound.duration() * percent / 100);
+    this.pos.next(this.toString(this.sound.seek()));
+    this.percent.next(this.sound.seek() / this.sound.duration());
   }
 
   private toString(seconds: number): string {
