@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+$BG: #496780;
+$FG: #e0cfae;
+$DK: #0d2d47;
+$LT: #bcd8f0;
+
+$NOTO: 'Noto Sans TC', sans-serif;
+
+body {	
+	* {
+    font-family: $NOTO;
+		word-wrap: break-word;
+  }
+}

@@ -1,0 +1,24 @@
+@import '../../../styles.scss';
+
+.dropdown-toggle, .dropdown-toggle:focus {
+  background-color: $BG;
+  color: $FG;
+}
+
+.dropdown-item {
+  color: $BG;
+  cursor: pointer; 
+}
+.dropdown-item:hover {
+  background-color: $FG;
+}
+
+.card {
+  background-color: $FG;
+  border: none;
+  cursor: pointer;
+  .card-body {
+    color: $BG;
+  }
+}
+
