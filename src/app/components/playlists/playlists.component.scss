@@ -5,6 +5,10 @@
   color: $FG;
 }
 
+.dropdown-menu {
+  border: none;
+}
+
 .dropdown-item {
   color: $BG;
   cursor: pointer; 
@@ -14,8 +18,9 @@
 }
 
 .card {
-  background-color: $FG;
-  border: none;
+  //background-color: $FG;
+  border-color: $BG;
+  border-width: 3px;
   cursor: pointer;
   .card-body {
     color: $BG;

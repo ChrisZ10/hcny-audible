@@ -1,12 +1,58 @@
-input[type=range]{
+@import '../../../styles.scss';
+
+input[type=range] {
   pointer-events: none;
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
 }
-input[type=range]::-webkit-slider-thumb{/*Webkit Browsers like Chome and Safari*/
-  pointer-events: auto;
+input[type=range]:focus {
+  outline: none;
 }
-input[type=range]::-moz-range-thumb{/*Firefox*/
+
+// thumb
+input[type=range]::-webkit-slider-thumb {/*Webkit Browsers like Chome and Safari*/
+  -webkit-appearance: none;
   pointer-events: auto;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin-top: -7.5px;
+  background-color: $BG;
+  border-radius: 50%;
 }
-input[type=range]::-ms-thumb{/*Internet Explorer*/
+input[type=range]::-moz-range-thumb {/*Firefox*/
   pointer-events: auto;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  background-color: $BG;
+  border-radius: 50%;
+}
+input[type=range]::-ms-thumb {/*Internet Explorer*/
+  pointer-events: auto;
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  background-color: $BG;
+  border-radius: 50%;
+}
+
+// track
+input[type=range]::-webkit-slider-runnable-track {
+  background-color: #FFF;
+  height: 5px;
+}
+input[type=range]::-moz-range-track {/*Firefox*/
+  background-color: #FFF;
+  height: 5px;
+}
+input[type=range]::-ms-track {/*Internet Explorer*/
+  background-color: #FFF;
+  height: 5px;
+}
+
+span {
+  font-family: 'Oswald', sans-serif;
+  color: $BG;
 }
