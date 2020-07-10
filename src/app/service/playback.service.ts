@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 })
 export class PlaybackService {
 
-  private baseUrl = 'http://hcny.org/app/assets/audio';
+  private baseUrl = 'https://hcny.org/app/assets/audio';
 
   sound: Howl;
 
