@@ -13,6 +13,10 @@ import { Track } from '../../interface/track';
 export class SelectPanelComponent implements OnInit {
 
   playlists: Playlist[] = [];
+  selectedPlaylist: Playlist = {
+    title: '尚未選擇',
+    slug: ''
+  };
   
   albums: Album[] = [];
   selectedAlbum: Album = {
@@ -40,20 +44,27 @@ export class SelectPanelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.audibleService.getPlaylists().subscribe( playlists => this.playlists = playlists );
+    this.audibleService.getPlaylists().subscribe( playlists => {
+      this.playlists = playlists;
+      
+      if (this.cookieService.check('playlist')) {
+        // console.log(this.cookieService.get('playlist'));
 
-    if (this.cookieService.check('playlist')) {
-      console.log(this.cookieService.get('playlist'));
-    }
-    if (this.cookieService.check('album')) {
-      console.log(this.cookieService.get('album'));
-    }
-    if (this.cookieService.check('track')) {
-      console.log(this.cookieService.get('track'));
-    }
-    if (this.cookieService.check('position')) {
-      console.log(this.cookieService.get('position'));
-    }
+        this.selectedPlaylist = this.playlists.find( playlist => 
+          playlist.slug === this.cookieService.get('playlist') 
+        );
+      }
+    });
+
+    // if (this.cookieService.check('album')) {
+    //   console.log(this.cookieService.get('album'));
+    // }
+    // if (this.cookieService.check('track')) {
+    //   console.log(this.cookieService.get('track'));
+    // }
+    // if (this.cookieService.check('position')) {
+    //   console.log(this.cookieService.get('position'));
+    // }
     
   }
 

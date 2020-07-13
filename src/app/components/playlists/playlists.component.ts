@@ -10,12 +10,8 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class PlaylistsComponent implements OnInit {
 
-  selectedPlaylist: Playlist = {
-    title: '尚未選擇',
-    slug: ''
-  };
-
   @Input() playlists: Playlist[];
+  @Input() selectedPlaylist: Playlist;
 
   @Output() playlistEvent = new EventEmitter<Playlist>();
 
