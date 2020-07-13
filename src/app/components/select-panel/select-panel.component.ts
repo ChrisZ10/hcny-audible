@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AudibleService } from '../../service/audible.service';
+import { CookieService } from 'ngx-cookie-service';
 import { Playlist } from '../../interface/playlist';
 import { Album } from '../../interface/album';
 import { Track } from '../../interface/track';
@@ -33,10 +34,27 @@ export class SelectPanelComponent implements OnInit {
   };
   isSelected: boolean = false;
 
-  constructor( private audibleService: AudibleService ) { }
+  constructor( 
+    private audibleService: AudibleService,
+    private cookieService: CookieService 
+  ) { }
 
   ngOnInit(): void {
     this.audibleService.getPlaylists().subscribe( playlists => this.playlists = playlists );
+
+    if (this.cookieService.check('playlist')) {
+      console.log(this.cookieService.get('playlist'));
+    }
+    if (this.cookieService.check('album')) {
+      console.log(this.cookieService.get('album'));
+    }
+    if (this.cookieService.check('track')) {
+      console.log(this.cookieService.get('track'));
+    }
+    if (this.cookieService.check('position')) {
+      console.log(this.cookieService.get('position'));
+    }
+    
   }
 
   receivePlaylist($event): void {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Howl } from 'howler';
 import { Track } from 'src/app/interface/track';
 import { Subject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class PlaybackService {
 
   message: Subject<string> = new Subject<string>();
 
-  constructor() { }
+  constructor( private cookieService: CookieService ) { }
 
   loadTrack( track: Track ): void {
     let self = this;
@@ -73,6 +74,7 @@ export class PlaybackService {
     
     self.pos.next(self.toString(self.sound.seek()));
     self.percent.next(self.sound.seek() / self.sound.duration());
+    this.cookieService.set( 'position', self.sound.seek() );
     
     if (self.sound.playing()) {
       window.requestAnimationFrame(self.updatePosition.bind(self));
