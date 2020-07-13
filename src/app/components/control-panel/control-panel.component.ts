@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-control-panel',
@@ -19,7 +20,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   index: number = 0;
 
   constructor( 
-    public playbackService: PlaybackService 
+    public playbackService: PlaybackService,
+    private cookieService: CookieService 
   ) {}
 
   ngOnInit(): void {

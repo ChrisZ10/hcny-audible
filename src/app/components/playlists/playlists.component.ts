@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AudibleService } from '../../service/audible.service';
 import { PlaybackService } from '../../service/playback.service';
 import { Playlist } from 'src/app/interface/playlist';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-playlists',
@@ -20,8 +20,8 @@ export class PlaylistsComponent implements OnInit {
   @Output() playlistEvent = new EventEmitter<Playlist>();
 
   constructor( 
-    private audibleService: AudibleService,
-    private playbackService: PlaybackService 
+    private playbackService: PlaybackService,
+    private cookieService: CookieService 
   ) { }
 
   ngOnInit(): void {}
@@ -29,6 +29,8 @@ export class PlaylistsComponent implements OnInit {
   onSelect(playlist: Playlist): void {
     if (this.selectedPlaylist !== playlist) {
       this.selectedPlaylist = playlist;
+      this.cookieService.set( 'playlist', playlist.slug );
+
       this.playlistEvent.emit(this.selectedPlaylist);
       this.playbackService.pauseTrack();
     }

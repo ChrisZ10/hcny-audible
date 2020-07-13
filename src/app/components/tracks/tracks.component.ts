@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from '../../interface/track';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-tracks',
@@ -15,7 +16,8 @@ export class TracksComponent implements OnInit {
   @Output() trackEvent = new EventEmitter<Track>();
 
   constructor( 
-    private playbackService: PlaybackService 
+    private playbackService: PlaybackService,
+    private cookieService: CookieService 
   ) { }
 
   ngOnInit(): void {}
@@ -23,6 +25,8 @@ export class TracksComponent implements OnInit {
   onSelect(track: Track): void {
     if (this.selectedTrack !== track) {
       this.selectedTrack = track;
+      this.cookieService.set( 'track', track.slug );
+
       this.trackEvent.emit(this.selectedTrack);
       this.playbackService.pauseTrack();
     }
