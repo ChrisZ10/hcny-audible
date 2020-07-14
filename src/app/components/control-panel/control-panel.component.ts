@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
 
@@ -13,7 +13,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   @Input() tracks: Track[];
   @Input() index: number;
 
-  @Output() updateEvent = new EventEmitter<Track>();
+  @Output() updateEvent = new EventEmitter<{track: Track, autoplay: boolean}>();
   
   isPlaying: boolean = false;
 
@@ -22,24 +22,17 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    // console.log(this.index);
-    
-    this.playbackService.message.subscribe(msg => {
-      if (msg === "load next track") {
-        this.forward();
-      } else if (msg === "change icon") {
+    this.playbackService.message.subscribe(msg => {      
+      if (msg === "autoload next track") {
+        this.autoforward();
+      } else if (msg === "keep playing") {
         this.isPlaying = true;
       }
     });
   }
 
-  ngOnChanges( changes: SimpleChanges ): void {
-    this.currentTrack = changes.currentTrack.currentValue;
-    
-    if (this.currentTrack.uri !== '') {
-      this.playbackService.loadTrack(this.currentTrack, 0, false);
-      this.isPlaying = false;
-    }
+  ngOnChanges(): void {
+    console.log("current index:" + this.index);
   }
 
   play(): void {
@@ -54,32 +47,45 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   backward(): void {
     if (this.index > 0) {
-      this.playbackService.pauseTrack();
+      this.pause();
+
       this.index--;
+      console.log("change index to:" + this.index);
+
       this.currentTrack = this.tracks[this.index];
+      
       if (this.currentTrack.uri !== '') {
-        this.playbackService.loadTrack(this.currentTrack, 0, true);
-        this.updateEvent.emit(this.currentTrack);
-        this.isPlaying = true;
+        this.updateEvent.emit({track: this.currentTrack, autoplay: false});
       }
     }
   }
 
   forward(): void {
     if (this.index < this.tracks.length - 1) {
-      this.playbackService.pauseTrack();
+      this.pause();
+      
       this.index++;
+      console.log("change index to:" + this.index);
+
       this.currentTrack = this.tracks[this.index];
+      
       if (this.currentTrack.uri !== '') {
-        this.playbackService.loadTrack(this.currentTrack, 0, true);
-        this.updateEvent.emit(this.currentTrack);
-        this.isPlaying = true;
+        this.updateEvent.emit({track: this.currentTrack, autoplay: false});
       }
     }
   }
 
-  receivePos($event): void {
-    this.playbackService.seekPosition($event);
+  autoforward(): void {
+    if (this.index < this.tracks.length - 1) {      
+      this.index++;
+      console.log("change index to:" + this.index);
+
+      this.currentTrack = this.tracks[this.index];
+      
+      if (this.currentTrack.uri !== '') {
+        this.updateEvent.emit({track: this.currentTrack, autoplay: true});
+      }
+    }
   }
 
 }

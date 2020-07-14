@@ -32,15 +32,8 @@ export class SelectPanelComponent implements OnInit {
     slug: '',
     uri: ''
   };
-
-  track: Track = {
-    title: '尚未加載',
-    slug: '',
-    uri: ''
-  };
-  isSelected: boolean = false;
-
   index: number = 0;
+  isSelected: boolean = false;
 
   constructor( 
     private audibleService: AudibleService,
@@ -75,7 +68,6 @@ export class SelectPanelComponent implements OnInit {
                     this.index = index;
                   }
                 });
-
                 this.isSelected = true;
 
                 this.playbackService.loadTrack(
@@ -105,12 +97,6 @@ export class SelectPanelComponent implements OnInit {
         slug: '',
         uri: ''
       };
-
-      this.track = {
-        title: '尚未加載',
-        slug: '',
-        uri: ''
-      };
       this.isSelected = false;
     });
   }
@@ -123,26 +109,34 @@ export class SelectPanelComponent implements OnInit {
         slug: '',
         uri: ''
       };
-
-      this.track = {
-        title: '尚未加載',
-        slug: '',
-        uri: ''
-      };
       this.isSelected = false;
     });
   }
 
   receiveTrack($event): void {
     this.audibleService.getTrack($event.slug).subscribe( track => {
-      this.track = track;
-      this.isSelected = true; 
+      this.selectedTrack = track;
+      this.isSelected = true;
+      
+      this.index = this.tracks.findIndex( track => track.slug === this.selectedTrack.slug );
+
+      this.playbackService.loadTrack(this.selectedTrack, 0, false);
     });
   }
 
   receiveUpdateTrack($event): void {
-    this.audibleService.getTrack($event.slug).subscribe( track => {
+    this.audibleService.getTrack($event.track.slug).subscribe( track => {      
       this.selectedTrack = track;
+      this.isSelected = true;
+      
+      this.index = this.tracks.findIndex( track => track.slug === this.selectedTrack.slug );
+
+      if ($event.autoplay) {
+        this.playbackService.loadTrack(this.selectedTrack, 0, true);
+      } else {
+        this.playbackService.loadTrack(this.selectedTrack, 0, false);
+      }
+      
     });
   }
 

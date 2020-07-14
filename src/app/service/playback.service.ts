@@ -28,28 +28,22 @@ export class PlaybackService {
   loadTrack( track: Track, position: number, autoPlay: boolean ): void {
     
     Howler.unload();
-    Howler.html5PoolSize = 100;
 
     let self = this;
-
     self.isLoaded.next(false);
 
     self.sound = new Howl({
       src: [`${self.baseUrl}${track.uri}`],
       preload: true,
       html5: true,
-      autoplay: autoPlay? true : false,
-      onload: () => {
+      autoplay: autoPlay,
+      onload: () => {        
+        self.isLoaded.next(true);                
+        self.duration.next(self.toString(self.sound.duration()));        
         
-        self.isLoaded.next(true);        
-        
-        self.duration.next(self.toString(self.sound.duration()));
-        
-        if (position) {
-          
+        if (position) {          
           self.pos.next(this.toString(self.sound.seek(position)));
-          self.percent.next(self.sound.seek() / self.sound.duration());
-        
+          self.percent.next(self.sound.seek() / self.sound.duration());        
         } else {
           self.pos.next("00:00:00");
         }
@@ -57,7 +51,6 @@ export class PlaybackService {
         window.requestAnimationFrame(self.updatePosition.bind(self));
 
         console.log("sound successfully loaded");
-
       },
       onloaderror: () => {
         self.isLoaded.next(false);
@@ -66,7 +59,7 @@ export class PlaybackService {
         window.requestAnimationFrame(self.updatePosition.bind(self));
       },
       onend: () => {
-        self.message.next("load next track");
+        self.message.next("autoload next track");
       }
     });
 
@@ -76,47 +69,48 @@ export class PlaybackService {
   }
 
   playTrack(): void {
+    let self = this;
     
-    if (this.sound) {
-      this.sound.play();
+    if (self.sound) {
+      window.requestAnimationFrame(self.updatePosition.bind(self));
+      self.sound.play();
     }
-
   }
 
   pauseTrack(): void {
-    
     if (this.sound) {
       this.sound.pause();
     }
-
   }
 
-  updatePosition(): void {
-    
+  updatePosition(): void {    
     let self = this;
     
     self.pos.next(self.toString(self.sound.seek()));
     self.percent.next(self.sound.seek() / self.sound.duration());
     
-    this.cookieService.set( 'position', self.sound.seek() );
-    
-    if (self.sound.playing()) {
-      window.requestAnimationFrame( self.updatePosition.bind(self) );
-    }
+    this.cookieService.set('position', self.sound.seek());
 
+    window.requestAnimationFrame(self.updatePosition.bind(self));  
   }
 
   seekPosition(percent: number): void {
+    let self = this;
     
-    this.sound.seek(this.sound.duration() * percent / 100);
+    self.sound.seek(self.sound.duration() * percent / 100);
     
-    this.pos.next(this.toString(this.sound.seek()));
-    this.percent.next(this.sound.seek() / this.sound.duration());
+    self.pos.next(self.toString(self.sound.seek()));
+    self.percent.next(self.sound.seek() / self.sound.duration());
 
+    this.cookieService.set('position', self.sound.seek());
+
+    window.requestAnimationFrame(self.updatePosition.bind(self));
+
+    self.message.next("keep playing");
+    self.playTrack();
   }
 
   private toString(seconds: number): string {
-    
     const dateObj = new Date( seconds * 1000 );
     
     const hr = Number.isNaN(dateObj.getUTCHours())? 0 : dateObj.getUTCHours();
@@ -128,7 +122,6 @@ export class PlaybackService {
                        sec.toString().padStart(2, '0');
 
     return timeString;
-  
   }
 
 }
