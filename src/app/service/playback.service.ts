@@ -28,6 +28,7 @@ export class PlaybackService {
   loadTrack( track: Track, position: Number, autoPlay: Boolean ): void {
     
     Howler.unload();
+    Howler.html5PoolSize = 100;
 
     let self = this;
 
@@ -38,7 +39,6 @@ export class PlaybackService {
       preload: true,
       html5: true,
       autoplay: autoPlay? true : false,
-      pool: 30,
       onload: () => {
         
         self.isLoaded.next(true);        
@@ -53,6 +53,8 @@ export class PlaybackService {
         } else {
           self.pos.next("00:00:00");
         }
+
+        window.requestAnimationFrame(self.updatePosition.bind(self));
 
         console.log("sound successfully loaded");
 
