@@ -39,7 +39,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     this.index = this.tracks.findIndex(track => track.slug === this.currentTrack.slug);
     
     if (this.currentTrack.uri !== '') {
-      this.playbackService.loadTrack(this.currentTrack);
+      this.playbackService.loadTrack(this.currentTrack, 0);
       this.isPlaying = true;
     }
   }

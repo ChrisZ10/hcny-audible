@@ -25,7 +25,7 @@ export class PlaybackService {
 
   constructor( private cookieService: CookieService ) { }
 
-  loadTrack( track: Track ): void {
+  loadTrack( track: Track, position: Number ): void {
     let self = this;
 
     self.isLoaded.next(false);
@@ -38,7 +38,11 @@ export class PlaybackService {
       onload: () => {
         self.isLoaded.next(true);        
         self.duration.next(self.toString(self.sound.duration()));
-        self.pos.next("00:00:00");
+        if (position) {
+          self.pos.next(this.toString(this.sound.seek(position)));
+        } else {
+          self.pos.next("00:00:00");
+        }
         console.log("sound successfully loaded");
       },
       onloaderror: () => {
@@ -65,7 +69,6 @@ export class PlaybackService {
   pauseTrack(): void {
     if (this.sound) {
       this.sound.pause();
-      console.log("sound paused");
     }
   }
 

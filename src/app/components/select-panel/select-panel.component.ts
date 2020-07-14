@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AudibleService } from '../../service/audible.service';
 import { CookieService } from 'ngx-cookie-service';
+import { PlaybackService } from 'src/app/service/playback.service';
+
 import { Playlist } from '../../interface/playlist';
 import { Album } from '../../interface/album';
 import { Track } from '../../interface/track';
@@ -40,32 +42,45 @@ export class SelectPanelComponent implements OnInit {
 
   constructor( 
     private audibleService: AudibleService,
-    private cookieService: CookieService 
+    private cookieService: CookieService,
+    private playbackService: PlaybackService 
   ) { }
 
   ngOnInit(): void {
-    this.audibleService.getPlaylists().subscribe( playlists => {
+    this.audibleService.getPlaylists().subscribe( playlists => {      
       this.playlists = playlists;
-      
-      if (this.cookieService.check('playlist')) {
-        // console.log(this.cookieService.get('playlist'));
 
+      if (this.cookieService.check('playlist')) {        
         this.selectedPlaylist = this.playlists.find( playlist => 
           playlist.slug === this.cookieService.get('playlist') 
         );
-      }
-    });
+      
+        if (this.cookieService.check('album')) {
+          this.audibleService.getAlbums(this.selectedPlaylist.slug).subscribe( albums => {            
+            this.albums = albums;
+            
+            this.selectedAlbum = this.albums.find( album => 
+              album.slug === this.cookieService.get('album') 
+            );
 
-    // if (this.cookieService.check('album')) {
-    //   console.log(this.cookieService.get('album'));
-    // }
-    // if (this.cookieService.check('track')) {
-    //   console.log(this.cookieService.get('track'));
-    // }
-    // if (this.cookieService.check('position')) {
-    //   console.log(this.cookieService.get('position'));
-    // }
-    
+            if (this.cookieService.check('track')) {
+              this.audibleService.getTracks(this.selectedAlbum.slug).subscribe ( tracks => {                
+                this.tracks = tracks;
+                
+                this.selectedTrack = this.tracks.find( track =>
+                  track.slug === this.cookieService.get('track')
+                );
+                this.isSelected = true;
+                this.playbackService.loadTrack(
+                  this.selectedTrack, 
+                  parseFloat(this.cookieService.get('position'))  
+                );
+              }); // tracks subscribe method ends here
+            }            
+          }); // albums subscribe method ends here
+        }      
+      }             
+    }); // playlists subscribe method ends here    
   }
 
   receivePlaylist($event): void {
