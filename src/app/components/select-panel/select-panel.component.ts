@@ -73,7 +73,8 @@ export class SelectPanelComponent implements OnInit {
                 this.isSelected = true;
                 this.playbackService.loadTrack(
                   this.selectedTrack, 
-                  parseFloat(this.cookieService.get('position'))  
+                  parseFloat(this.cookieService.get('position')),
+                  false  
                 );
               }); // tracks subscribe method ends here
             }            

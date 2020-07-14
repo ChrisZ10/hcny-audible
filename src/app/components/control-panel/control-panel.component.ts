@@ -15,7 +15,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   @Output() updateEvent = new EventEmitter<Track>();
   
-  isPlaying: boolean = true;
+  isPlaying: boolean = false;
 
   index: number = 0;
 
@@ -39,8 +39,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
     this.index = this.tracks.findIndex(track => track.slug === this.currentTrack.slug);
     
     if (this.currentTrack.uri !== '') {
-      this.playbackService.loadTrack(this.currentTrack, 0);
-      this.isPlaying = true;
+      this.playbackService.loadTrack(this.currentTrack, 0, false);
+      this.isPlaying = false;
     }
   }
 
@@ -60,7 +60,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       this.index--;
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
-        this.playbackService.loadTrack(this.currentTrack);
+        this.playbackService.loadTrack(this.currentTrack, 0, true);
         this.updateEvent.emit(this.currentTrack);
         this.isPlaying = true;
       }
@@ -73,7 +73,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       this.index++;
       this.currentTrack = this.tracks[this.index];
       if (this.currentTrack.uri !== '') {
-        this.playbackService.loadTrack(this.currentTrack);
+        this.playbackService.loadTrack(this.currentTrack, 0, true);
         this.updateEvent.emit(this.currentTrack);
         this.isPlaying = true;
       }

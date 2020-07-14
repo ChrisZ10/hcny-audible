@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import { Track } from 'src/app/interface/track';
 import { Subject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
@@ -25,7 +25,10 @@ export class PlaybackService {
 
   constructor( private cookieService: CookieService ) { }
 
-  loadTrack( track: Track, position: Number ): void {
+  loadTrack( track: Track, position: Number, autoPlay: Boolean ): void {
+    
+    Howler.unload();
+
     let self = this;
 
     self.isLoaded.next(false);
@@ -34,16 +37,25 @@ export class PlaybackService {
       src: [`${self.baseUrl}${track.uri}`],
       preload: true,
       html5: true,
-      autoplay: true,
+      autoplay: autoPlay? true : false,
+      pool: 30,
       onload: () => {
+        
         self.isLoaded.next(true);        
+        
         self.duration.next(self.toString(self.sound.duration()));
+        
         if (position) {
-          self.pos.next(this.toString(this.sound.seek(position)));
+          
+          self.pos.next(this.toString(self.sound.seek(position)));
+          self.percent.next(self.sound.seek() / self.sound.duration());
+        
         } else {
           self.pos.next("00:00:00");
         }
+
         console.log("sound successfully loaded");
+
       },
       onloaderror: () => {
         self.isLoaded.next(false);
@@ -58,39 +70,51 @@ export class PlaybackService {
 
     console.log("track loaded:");
     console.log(this.sound);
+    
   }
 
   playTrack(): void {
+    
     if (this.sound) {
       this.sound.play();
     }
+
   }
 
   pauseTrack(): void {
+    
     if (this.sound) {
       this.sound.pause();
     }
+
   }
 
   updatePosition(): void {
+    
     let self = this;
     
     self.pos.next(self.toString(self.sound.seek()));
     self.percent.next(self.sound.seek() / self.sound.duration());
+    
     this.cookieService.set( 'position', self.sound.seek() );
     
     if (self.sound.playing()) {
-      window.requestAnimationFrame(self.updatePosition.bind(self));
+      window.requestAnimationFrame( self.updatePosition.bind(self) );
     }
+
   }
 
   seekPosition(percent: number): void {
+    
     this.sound.seek(this.sound.duration() * percent / 100);
+    
     this.pos.next(this.toString(this.sound.seek()));
     this.percent.next(this.sound.seek() / this.sound.duration());
+
   }
 
   private toString(seconds: number): string {
+    
     const dateObj = new Date( seconds * 1000 );
     
     const hr = Number.isNaN(dateObj.getUTCHours())? 0 : dateObj.getUTCHours();
@@ -102,6 +126,7 @@ export class PlaybackService {
                        sec.toString().padStart(2, '0');
 
     return timeString;
+  
   }
 
 }
