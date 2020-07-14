@@ -6,7 +6,7 @@
       id="formControlRange" 
       (change)="onChange($event)"
       (input)="onInput()"
-      [value]="(this.playbackService.percent | async) * 100 || 0"
+      [value]="(this.playbackService.percent | async) * 100"
       [disabled]="!(this.playbackService.isLoaded | async)"
     >
   </div>
