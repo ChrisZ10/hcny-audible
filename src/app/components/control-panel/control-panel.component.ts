@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-control-panel',
@@ -19,12 +18,11 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   isPlaying: boolean = false;
 
   constructor( 
-    public playbackService: PlaybackService,
-    private cookieService: CookieService 
+    public playbackService: PlaybackService
   ) {}
 
   ngOnInit(): void {
-    console.log(this.index);
+    // console.log(this.index);
     
     this.playbackService.message.subscribe(msg => {
       if (msg === "load next track") {
