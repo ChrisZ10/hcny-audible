@@ -60,6 +60,9 @@ export class PlaybackService {
       },
       onend: () => {
         self.message.next("autoload next track");
+      },
+      onseek: () => {
+        window.requestAnimationFrame(self.updatePosition.bind(self));
       }
     });
 
