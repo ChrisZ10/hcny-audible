@@ -12,12 +12,11 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   @Input() currentTrack: Track;
   @Input() tracks: Track[];
+  @Input() index: number;
 
   @Output() updateEvent = new EventEmitter<Track>();
   
   isPlaying: boolean = false;
-
-  index: number = 0;
 
   constructor( 
     public playbackService: PlaybackService,
@@ -25,6 +24,8 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.index);
+    
     this.playbackService.message.subscribe(msg => {
       if (msg === "load next track") {
         this.forward();
@@ -36,7 +37,6 @@ export class ControlPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges( changes: SimpleChanges ): void {
     this.currentTrack = changes.currentTrack.currentValue;
-    this.index = this.tracks.findIndex(track => track.slug === this.currentTrack.slug);
     
     if (this.currentTrack.uri !== '') {
       this.playbackService.loadTrack(this.currentTrack, 0, false);

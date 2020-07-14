@@ -25,7 +25,7 @@ export class PlaybackService {
 
   constructor( private cookieService: CookieService ) { }
 
-  loadTrack( track: Track, position: Number, autoPlay: Boolean ): void {
+  loadTrack( track: Track, position: number, autoPlay: boolean ): void {
     
     Howler.unload();
     Howler.html5PoolSize = 100;

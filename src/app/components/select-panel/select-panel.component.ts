@@ -40,6 +40,8 @@ export class SelectPanelComponent implements OnInit {
   };
   isSelected: boolean = false;
 
+  index: number = 0;
+
   constructor( 
     private audibleService: AudibleService,
     private cookieService: CookieService,
@@ -67,10 +69,15 @@ export class SelectPanelComponent implements OnInit {
               this.audibleService.getTracks(this.selectedAlbum.slug).subscribe ( tracks => {                
                 this.tracks = tracks;
                 
-                this.selectedTrack = this.tracks.find( track =>
-                  track.slug === this.cookieService.get('track')
-                );
+                this.tracks.find(( track, index ) => {
+                  if (track.slug === this.cookieService.get('track')) {
+                    this.selectedTrack = track;
+                    this.index = index;
+                  }
+                });
+
                 this.isSelected = true;
+
                 this.playbackService.loadTrack(
                   this.selectedTrack, 
                   parseFloat(this.cookieService.get('position')),
