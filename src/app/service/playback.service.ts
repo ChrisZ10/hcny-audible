@@ -47,8 +47,8 @@ export class PlaybackService {
           
           self.duration.next(self.toString(track.sound.duration()));
           if (position) {
-            self.pos.next(this.toString(track.sound.seek(position)));
-            self.percent.next(self.sound.seek() / self.sound.duration());
+            self.pos.next(self.toString(track.sound.seek(position)));
+            self.percent.next(track.sound.seek() / track.sound.duration());
           } else {
             self.pos.next("00:00:00");
             self.percent.next(0);
@@ -81,14 +81,16 @@ export class PlaybackService {
   updatePosition(): void {    
     let self = this;
 
-    let seek = self.sound.seek();  
+    let seek = Number(self.sound.seek());
+    if (isNaN(seek)) {
+      seek = self.sound._sounds[0]._seek;
+    }
     self.pos.next(self.toString(seek));
+
     self.percent.next(self.sound.seek() / self.sound.duration());    
     this.cookieService.set('position', self.sound.seek());
 
-    if (self.sound.playing()) {
-      window.requestAnimationFrame(self.updatePosition.bind(self));
-    }  
+    window.requestAnimationFrame(self.updatePosition.bind(self));  
   }
 
   /**
@@ -110,7 +112,6 @@ export class PlaybackService {
     const timeString = hr.toString().padStart( 2, '0' ) + ':' + 
                        min.toString().padStart(2, '0') + ':' + 
                        sec.toString().padStart(2, '0');
-
     return timeString;
   }
 
