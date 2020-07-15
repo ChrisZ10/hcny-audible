@@ -19,7 +19,7 @@ export class ProgressBarComponent implements OnInit {
   }
 
   onInput(): void {
-    this.playbackService.pauseTrack();
+    this.playbackService.sound.pause();
   }
 
 }

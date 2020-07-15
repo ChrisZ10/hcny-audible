@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
 import { Track } from 'src/app/interface/track';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-control-panel',
@@ -18,30 +19,35 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   isPlaying: boolean = false;
 
   constructor( 
-    public playbackService: PlaybackService
-  ) {}
-
-  ngOnInit(): void {
+    public playbackService: PlaybackService,
+    private cookieService: CookieService
+  ) {
     this.playbackService.message.subscribe(msg => {      
-      if (msg === "autoload next track") {
-        this.autoforward();
-      } else if (msg === "keep playing") {
-        this.isPlaying = true;
+      switch (msg) {
+        case "autoload next track":
+          this.forward(true);
+          break;
+        case "keep playing":
+          this.isPlaying = true;
+          break;
+        default:
       }
     });
   }
+
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     console.log("current index:" + this.index);
   }
 
   play(): void {
-    this.playbackService.playTrack();
+    this.playbackService.sound.play();
     this.isPlaying = true;
   }
 
   pause(): void {
-    this.playbackService.pauseTrack();
+    this.playbackService.sound.pause();
     this.isPlaying = false;
   }
 
@@ -53,38 +59,24 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       console.log("change index to:" + this.index);
 
       this.currentTrack = this.tracks[this.index];
-      
-      if (this.currentTrack.uri !== '') {
-        this.updateEvent.emit({track: this.currentTrack, autoplay: false});
-      }
+      this.cookieService.set( 'track', this.currentTrack.slug );
+      this.updateEvent.emit({track: this.currentTrack, autoplay: false});
     }
   }
 
-  forward(): void {
+  forward(autoPlay: boolean): void {
     if (this.index < this.tracks.length - 1) {
-      this.pause();
-      
+      if (!autoPlay) {
+        this.pause();
+      }
       this.index++;
       console.log("change index to:" + this.index);
 
       this.currentTrack = this.tracks[this.index];
-      
-      if (this.currentTrack.uri !== '') {
-        this.updateEvent.emit({track: this.currentTrack, autoplay: false});
-      }
-    }
-  }
-
-  autoforward(): void {
-    if (this.index < this.tracks.length - 1) {      
-      this.index++;
-      console.log("change index to:" + this.index);
-
-      this.currentTrack = this.tracks[this.index];
-      
-      if (this.currentTrack.uri !== '') {
-        this.updateEvent.emit({track: this.currentTrack, autoplay: true});
-      }
+      this.cookieService.set( 'track', this.currentTrack.slug );
+      autoPlay?
+      this.updateEvent.emit({track: this.currentTrack, autoplay: true}):
+      this.updateEvent.emit({track: this.currentTrack, autoplay: false});
     }
   }
 

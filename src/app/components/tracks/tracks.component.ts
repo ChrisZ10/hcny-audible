@@ -28,7 +28,9 @@ export class TracksComponent implements OnInit {
       this.cookieService.set( 'track', track.slug );
 
       this.trackEvent.emit(this.selectedTrack);
-      this.playbackService.pauseTrack();
+      if (this.playbackService.sound) {
+        this.playbackService.sound.pause();
+      }
     }
   }
 

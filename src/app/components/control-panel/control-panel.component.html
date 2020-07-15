@@ -45,7 +45,7 @@
         type="button" 
         class="btn btn-lg"
         [ngClass]="{'disabled': index === tracks.length - 1}"
-        (click)="forward()"
+        (click)="forward(false)"
       >
         <i class="fas fa-chevron-right"></i>
       </button>

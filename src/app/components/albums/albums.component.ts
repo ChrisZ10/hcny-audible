@@ -28,7 +28,9 @@ export class AlbumsComponent implements OnInit {
       this.cookieService.set( 'album', album.slug );
 
       this.albumEvent.emit(this.selectedAlbum);
-      this.playbackService.pauseTrack();
+      if (this.playbackService.sound) {
+        this.playbackService.sound.pause();
+      }
     }
   }
 

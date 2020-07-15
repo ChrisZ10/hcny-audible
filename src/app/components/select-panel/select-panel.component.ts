@@ -12,6 +12,7 @@ import { Track } from '../../interface/track';
   templateUrl: './select-panel.component.html',
   styleUrls: ['./select-panel.component.scss']
 })
+
 export class SelectPanelComponent implements OnInit {
 
   playlists: Playlist[] = [];
@@ -30,7 +31,8 @@ export class SelectPanelComponent implements OnInit {
   selectedTrack: Track = {
     title: '尚未選擇',
     slug: '',
-    uri: ''
+    uri: '',
+    sound: null
   };
   index: number = 0;
   isSelected: boolean = false;
@@ -70,11 +72,16 @@ export class SelectPanelComponent implements OnInit {
                 });
                 this.isSelected = true;
 
-                this.playbackService.loadTrack(
-                  this.selectedTrack, 
-                  parseFloat(this.cookieService.get('position')),
-                  false  
-                );
+                if (this.cookieService.check('position')) {
+                  this.playbackService.loadTrack(
+                    this.selectedTrack, 
+                    parseFloat(this.cookieService.get('position')),
+                    false  
+                  );
+                } else {
+                  this.playbackService.loadTrack(this.selectedTrack, 0, false);
+                }
+                
               }); // tracks subscribe method ends here
             }            
           }); // albums subscribe method ends here
@@ -95,7 +102,8 @@ export class SelectPanelComponent implements OnInit {
       this.selectedTrack = {
         title: '尚未選擇',
         slug: '',
-        uri: ''
+        uri: '',
+        sound: null
       };
       this.isSelected = false;
     });
@@ -107,7 +115,8 @@ export class SelectPanelComponent implements OnInit {
       this.selectedTrack = {
         title: '尚未選擇',
         slug: '',
-        uri: ''
+        uri: '',
+        sound: null
       };
       this.isSelected = false;
     });
@@ -119,7 +128,6 @@ export class SelectPanelComponent implements OnInit {
       this.isSelected = true;
       
       this.index = this.tracks.findIndex( track => track.slug === this.selectedTrack.slug );
-
       this.playbackService.loadTrack(this.selectedTrack, 0, false);
     });
   }
@@ -130,13 +138,9 @@ export class SelectPanelComponent implements OnInit {
       this.isSelected = true;
       
       this.index = this.tracks.findIndex( track => track.slug === this.selectedTrack.slug );
-
-      if ($event.autoplay) {
-        this.playbackService.loadTrack(this.selectedTrack, 0, true);
-      } else {
-        this.playbackService.loadTrack(this.selectedTrack, 0, false);
-      }
-      
+      $event.autoplay?
+      this.playbackService.loadTrack(this.selectedTrack, 0, true):
+      this.playbackService.loadTrack(this.selectedTrack, 0, false);      
     });
   }
 

@@ -62,7 +62,7 @@ export class AudibleService {
     )
     .pipe(
       tap(ev => console.log( 'fetched single track:' + ev )),
-      catchError(this.handleError<Track>( 'getTrack', {title: '', slug: '', uri: ''} ))
+      catchError(this.handleError<Track>( 'getTrack', {title: '', slug: '', uri: '', sound: null} ))
     );
   }
 

@@ -28,7 +28,9 @@ export class PlaylistsComponent implements OnInit {
       this.cookieService.set( 'playlist', playlist.slug );
 
       this.playlistEvent.emit(this.selectedPlaylist);
-      this.playbackService.pauseTrack();
+      if (this.playbackService.sound) {
+        this.playbackService.sound.pause();
+      }
     }
   }
 

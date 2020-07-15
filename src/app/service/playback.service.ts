@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 import { Track } from 'src/app/interface/track';
 import { Subject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
@@ -10,107 +10,94 @@ import { CookieService } from 'ngx-cookie-service';
 export class PlaybackService {
 
   private baseUrl = 'https://hcny.org/app/assets/audio';
-
-  sound: Howl;
-
   isLoaded: Subject<boolean> = new Subject<boolean>();
-
+  message: Subject<string> = new Subject<string>();
   stopUpdatePosition: boolean = false;
+  sound: Howl = null;
   
   pos: Subject<string> = new Subject<string>();
   duration: Subject<string> = new Subject<string>();
   percent: Subject<number> = new Subject<number>();
 
-  message: Subject<string> = new Subject<string>();
-
   constructor( private cookieService: CookieService ) { }
 
+  /**
+   * Create a new Howl object or assign an existing one for the attribute "sound".
+   * @param track: currently selected track. 
+   * @param position: starting position.
+   * @param autoPlay: an indicator indicating if autoplay is enabled.
+   */
   loadTrack( track: Track, position: number, autoPlay: boolean ): void {
-    
-    Howler.unload();
-
     let self = this;
-    self.isLoaded.next(false);
 
-    self.sound = new Howl({
-      src: [`${self.baseUrl}${track.uri}`],
-      preload: true,
-      html5: true,
-      autoplay: autoPlay,
-      onload: () => {        
-        self.isLoaded.next(true);                
-        self.duration.next(self.toString(self.sound.duration()));        
-        
-        if (position) {          
-          self.pos.next(this.toString(self.sound.seek(position)));
-          self.percent.next(self.sound.seek() / self.sound.duration());        
-        } else {
-          self.pos.next("00:00:00");
+    if (track.sound) {
+      self.sound = track.sound;
+    } else {
+      self.isLoaded.next(false);
+
+      track.sound = new Howl({
+        src: [`${self.baseUrl}${track.uri}`],
+        preload: true,
+        html5: true,
+        autoplay: autoPlay,
+        onload: () => {
+          self.isLoaded.next(true);
+          self.duration.next(self.toString(track.sound.duration()));
+          if (position) {
+            self.pos.next(this.toString(track.sound.seek(position)));
+            self.percent.next(self.sound.seek() / self.sound.duration());
+          } else {
+            self.pos.next("00:00:00");
+            self.percent.next(0);
+          }
+        },
+        onloaderror: () => {
+          self.isLoaded.next(false);
+        },
+        onplay: () => {
+          window.requestAnimationFrame(self.updatePosition.bind(self));
+        },
+        onend: () => {
+          self.message.next("autoload next track");
+        },
+        onseek: () => {
+          window.requestAnimationFrame(self.updatePosition.bind(self));
         }
-
-        window.requestAnimationFrame(self.updatePosition.bind(self));
-
-        console.log("sound successfully loaded");
-      },
-      onloaderror: () => {
-        self.isLoaded.next(false);
-      },
-      onplay: () => {
-        window.requestAnimationFrame(self.updatePosition.bind(self));
-      },
-      onend: () => {
-        self.message.next("autoload next track");
-      },
-      onseek: () => {
-        window.requestAnimationFrame(self.updatePosition.bind(self));
-      }
-    });
+      });
+      self.sound = track.sound;
+    
+    } // else block ends here
 
     console.log("track loaded:");
-    console.log(this.sound);
-    
+    console.log(self.sound);   
   }
 
-  playTrack(): void {
-    let self = this;
-    
-    if (self.sound) {
-      window.requestAnimationFrame(self.updatePosition.bind(self));
-      self.sound.play();
-    }
-  }
-
-  pauseTrack(): void {
-    if (this.sound) {
-      this.sound.pause();
-    }
-  }
-
+  /**
+   * The method is called within the method "requestAnimationFrame" to update the playback position
+   */
   updatePosition(): void {    
     let self = this;
-    
-    self.pos.next(self.toString(self.sound.seek()));
-    self.percent.next(self.sound.seek() / self.sound.duration());
-    
+
+    let seek = self.sound.seek() || 0;  
+    self.pos.next(self.toString(seek));
+    self.percent.next(self.sound.seek() / self.sound.duration());    
     this.cookieService.set('position', self.sound.seek());
 
-    window.requestAnimationFrame(self.updatePosition.bind(self));  
+    if (self.sound.playing()) {
+      window.requestAnimationFrame(self.updatePosition.bind(self));
+    }  
   }
 
+  /**
+   * Seek a new position of the currently playing song
+   * @param percent: the percentage of the currently playing song to be skipped. 
+   */
   seekPosition(percent: number): void {
     let self = this;
     
     self.sound.seek(self.sound.duration() * percent / 100);
-    
-    self.pos.next(self.toString(self.sound.seek()));
-    self.percent.next(self.sound.seek() / self.sound.duration());
-
-    this.cookieService.set('position', self.sound.seek());
-
-    window.requestAnimationFrame(self.updatePosition.bind(self));
-
     self.message.next("keep playing");
-    self.playTrack();
+    self.sound.play();
   }
 
   private toString(seconds: number): string {
