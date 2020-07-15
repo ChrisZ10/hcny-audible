@@ -18,10 +18,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   
   isPlaying: boolean = false;
 
-  constructor( 
-    public playbackService: PlaybackService,
-    private cookieService: CookieService
-  ) {
+  constructor( public playbackService: PlaybackService, private cookieService: CookieService) {
     this.playbackService.message.subscribe(msg => {      
       switch (msg) {
         case "autoload next track":
@@ -32,6 +29,10 @@ export class ControlPanelComponent implements OnInit, OnChanges {
           break;
         default:
       }
+    });
+
+    this.playbackService.isPlaying.subscribe(isPlaying => {
+      this.isPlaying = isPlaying;
     });
   }
 

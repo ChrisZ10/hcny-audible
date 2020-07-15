@@ -11,6 +11,7 @@ export class PlaybackService {
 
   private baseUrl = 'https://hcny.org/app/assets/audio';
   isLoaded: Subject<boolean> = new Subject<boolean>();
+  isPlaying: Subject<boolean> = new Subject<boolean>();
   message: Subject<string> = new Subject<string>();
   stopUpdatePosition: boolean = false;
   sound: Howl = null;
@@ -42,6 +43,7 @@ export class PlaybackService {
         autoplay: autoPlay,
         onload: () => {
           self.isLoaded.next(true);
+          self.isPlaying.next(false);
           self.duration.next(self.toString(track.sound.duration()));
           if (position) {
             self.pos.next(this.toString(track.sound.seek(position)));
