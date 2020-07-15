@@ -17,15 +17,17 @@ export class ControlPanelComponent implements OnInit, OnChanges {
   @Output() updateEvent = new EventEmitter<{track: Track, autoplay: boolean}>();
   
   isPlaying: boolean = false;
+  isLoaded: boolean = false;
 
   constructor( public playbackService: PlaybackService, private cookieService: CookieService) {
+    this.playbackService.isLoaded.subscribe( isLoaded => {
+      this.isLoaded = isLoaded;
+    });
+
     this.playbackService.message.subscribe(msg => {      
       switch (msg) {
         case "autoload next track":
           this.forward(true);
-          break;
-        case "keep playing":
-          this.isPlaying = true;
           break;
         default:
       }

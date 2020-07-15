@@ -43,7 +43,8 @@ export class PlaybackService {
         autoplay: autoPlay,
         onload: () => {
           self.isLoaded.next(true);
-          self.isPlaying.next(false);
+          autoPlay?self.isPlaying.next(true):self.isPlaying.next(false);
+          
           self.duration.next(self.toString(track.sound.duration()));
           if (position) {
             self.pos.next(this.toString(track.sound.seek(position)));
@@ -80,7 +81,7 @@ export class PlaybackService {
   updatePosition(): void {    
     let self = this;
 
-    let seek = self.sound.seek() || 0;  
+    let seek = self.sound.seek();  
     self.pos.next(self.toString(seek));
     self.percent.next(self.sound.seek() / self.sound.duration());    
     this.cookieService.set('position', self.sound.seek());
@@ -96,10 +97,7 @@ export class PlaybackService {
    */
   seekPosition(percent: number): void {
     let self = this;
-    
     self.sound.seek(self.sound.duration() * percent / 100);
-    self.message.next("keep playing");
-    self.sound.play();
   }
 
   private toString(seconds: number): string {

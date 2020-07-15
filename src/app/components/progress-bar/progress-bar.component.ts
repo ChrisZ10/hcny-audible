@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PlaybackService } from '../../service/playback.service';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-progress-bar',
@@ -8,18 +9,25 @@ import { PlaybackService } from '../../service/playback.service';
 })
 export class ProgressBarComponent implements OnInit {
 
-  constructor( 
-    public playbackService: PlaybackService 
-  ) {}
+  percent: string;
 
-  ngOnInit(): void {}
-
-  onChange($event): void {
-    this.playbackService.seekPosition($event.target.value);
+  constructor( public playbackService: PlaybackService ) {
+    this.playbackService.percent.subscribe( percent => {
+      this.percent = (percent * 100).toFixed(2) + "%";
+    });
   }
 
-  onInput(): void {
-    this.playbackService.sound.pause();
+  ngOnInit(): void {
+    let self = this;
+    
+    $('.progress').on('click', function($event) {
+      let left = $('.progress').position().left;
+      let width = $('.progress').width();
+      let percentage = ($event.pageX - left) / width * 100;
+
+      self.percent = percentage.toFixed(2) + "%";
+      self.playbackService.seekPosition(percentage);      
+    });
   }
 
 }

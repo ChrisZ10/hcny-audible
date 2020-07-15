@@ -17,29 +17,28 @@
       <button
         type="button" 
         class="btn btn-lg mx-2"
-        *ngIf="!(this.playbackService.isLoaded | async) else controlBlock"
+        *ngIf="!isLoaded"
       >
         <i class="fas fa-spinner fa-spin"></i>
       </button>
-      <ng-template #controlBlock>
-        <button 
-          type="button" 
-          class="btn btn-lg mx-2"
-          *ngIf="!isPlaying else elseBlock"
-          (click)="play()"
-        >
-            <i class="fas fa-play"></i>
-        </button>
-        <ng-template #elseBlock>
-          <button 
-            type="button" 
-            class="btn btn-lg mx-2"
-            (click)="pause()"        
-          >
-              <i class="fas fa-pause"></i>
-          </button>
-        </ng-template>
-      </ng-template>
+
+      <button 
+        type="button" 
+        class="btn btn-lg mx-2"
+        *ngIf="isLoaded && !isPlaying"
+        (click)="play()"
+      >
+        <i class="fas fa-play"></i>
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-lg mx-2"
+        *ngIf="isLoaded && isPlaying"
+        (click)="pause()"        
+      >
+        <i class="fas fa-pause"></i>
+      </button>
       
       <button 
         type="button" 

@@ -32,7 +32,8 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "howler"
+              "howler",
+              "jquery"
             ]
           },
           "configurations": {
