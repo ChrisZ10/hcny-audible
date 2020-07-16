@@ -80,6 +80,10 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       autoPlay?
       this.updateEvent.emit({track: this.currentTrack, autoplay: true}):
       this.updateEvent.emit({track: this.currentTrack, autoplay: false});
+    } else {
+      if (autoPlay) {
+        this.pause();
+      }
     }
   }
 
