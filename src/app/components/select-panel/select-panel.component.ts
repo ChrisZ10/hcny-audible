@@ -83,8 +83,18 @@ export class SelectPanelComponent implements OnInit {
                 }
                 
               }); // tracks subscribe method ends here
-            }            
+            } else {
+              // no track cookie stored, load all tracks
+              this.audibleService.getTracks(this.selectedAlbum.slug).subscribe( tracks => {
+                this.tracks = tracks;
+              });
+            }           
           }); // albums subscribe method ends here
+        } else {
+          // no album cookie stored, load all albums
+          this.audibleService.getAlbums(this.selectedPlaylist.slug).subscribe( albums => {
+            this.albums = albums;
+          });
         }      
       }             
     }); // playlists subscribe method ends here    
