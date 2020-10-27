@@ -25,7 +25,7 @@ export class TracksComponent implements OnInit {
   onSelect(track: Track): void {
     if (this.selectedTrack !== track) {
       this.selectedTrack = track;
-      this.cookieService.set( 'track', track.slug );
+      this.cookieService.set( 'track', track.slug, 365 );
 
       this.trackEvent.emit(this.selectedTrack);
       if (this.playbackService.sound) {

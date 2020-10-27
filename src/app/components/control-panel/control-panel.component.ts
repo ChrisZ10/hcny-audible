@@ -62,7 +62,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       console.log("change index to:" + this.index);
 
       this.currentTrack = this.tracks[this.index];
-      this.cookieService.set( 'track', this.currentTrack.slug );
+      this.cookieService.set( 'track', this.currentTrack.slug, 365 );
       this.updateEvent.emit({track: this.currentTrack, autoplay: false});
     }
   }
@@ -76,7 +76,7 @@ export class ControlPanelComponent implements OnInit, OnChanges {
       console.log("change index to:" + this.index);
 
       this.currentTrack = this.tracks[this.index];
-      this.cookieService.set( 'track', this.currentTrack.slug );
+      this.cookieService.set( 'track', this.currentTrack.slug, 365 );
       autoPlay?
       this.updateEvent.emit({track: this.currentTrack, autoplay: true}):
       this.updateEvent.emit({track: this.currentTrack, autoplay: false});

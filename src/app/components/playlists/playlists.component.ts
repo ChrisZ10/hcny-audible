@@ -25,7 +25,7 @@ export class PlaylistsComponent implements OnInit {
   onSelect(playlist: Playlist): void {
     if (this.selectedPlaylist !== playlist) {
       this.selectedPlaylist = playlist;
-      this.cookieService.set( 'playlist', playlist.slug );
+      this.cookieService.set( 'playlist', playlist.slug, 365 );
 
       this.playlistEvent.emit(this.selectedPlaylist);
       if (this.playbackService.sound) {

@@ -25,7 +25,7 @@ export class AlbumsComponent implements OnInit {
   onSelect(album: Album): void {
     if (this.selectedAlbum !== album) {
       this.selectedAlbum = album;
-      this.cookieService.set( 'album', album.slug );
+      this.cookieService.set( 'album', album.slug, 365 );
 
       this.albumEvent.emit(this.selectedAlbum);
       if (this.playbackService.sound) {
