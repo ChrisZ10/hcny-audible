@@ -3,3 +3,15 @@
 p {
   color: $BG;
 }
+
+.dark {
+  color: $FG;
+  background-color: $BG;
+  &:hover {
+    background-color: $DK;
+  }
+}
+
+a:hover {
+  text-decoration: none;
+}

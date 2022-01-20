@@ -7,7 +7,7 @@
     <div class="btn-group" role="group" style="width:100%">    
       <button 
         type="button" 
-        class="btn btn-lg"
+        class="btn btn-lg shadow"
         [ngClass]="{'disabled': index === 0}"
         (click)="backward()"
       >
@@ -16,7 +16,7 @@
       
       <button
         type="button" 
-        class="btn btn-lg mx-2"
+        class="btn btn-lg mx-2 shadow"
         *ngIf="!isLoaded"
       >
         <i class="fas fa-spinner fa-spin"></i>
@@ -24,7 +24,7 @@
 
       <button 
         type="button" 
-        class="btn btn-lg mx-2"
+        class="btn btn-lg mx-2 shadow"
         *ngIf="isLoaded && !isPlaying"
         (click)="play()"
       >
@@ -33,7 +33,7 @@
       
       <button 
         type="button" 
-        class="btn btn-lg mx-2"
+        class="btn btn-lg mx-2 shadow"
         *ngIf="isLoaded && isPlaying"
         (click)="pause()"        
       >
@@ -42,7 +42,7 @@
       
       <button 
         type="button" 
-        class="btn btn-lg"
+        class="btn btn-lg shadow"
         [ngClass]="{'disabled': index === tracks.length - 1}"
         (click)="forward(false)"
       >
